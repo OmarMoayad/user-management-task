@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 export default function Users() {
     const queryClient = useQueryClient();
     const GetUsers = async () => {
-        const response = await axios.get("http://ums12.runasp.net/api/users");
+        const response = await axios.get("https://ums12.runasp.net/api/users");
         return response.data;
     }
 
@@ -18,7 +18,7 @@ export default function Users() {
 
     const DeleteUser = async (id) => {
         try {
-            await axios.delete(`http://ums12.runasp.net/api/users/${id}`);
+            await axios.delete(`https://ums12.runasp.net/api/users/${id}`);
             queryClient.invalidateQueries({ queryKey: ["users"] });
         } catch (err) {
             console.log(err);

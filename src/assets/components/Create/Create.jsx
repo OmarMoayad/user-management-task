@@ -15,7 +15,7 @@ const AddUser = async (data) => {
     formData.append("age", data.age);
     formData.append("image", data.image[0]);
 
-    await axios.post("http://ums12.runasp.net/api/users", formData);
+    await axios.post("https://ums12.runasp.net/api/users", formData);
     queryClient.invalidateQueries({ queryKey: ["users"] });
 
 

@@ -7,7 +7,7 @@ export default function Details() {
   const { id } = useParams();
 
   const getuserdetails = async () => {
-    const response = await axios.get(`http://ums12.runasp.net/api/users/${id}`);
+    const response = await axios.get(`https://ums12.runasp.net/api/users/${id}`);
     return response.data.data;
   };
 
