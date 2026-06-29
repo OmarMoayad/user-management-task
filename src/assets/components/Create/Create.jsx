@@ -2,12 +2,27 @@ import React from 'react'
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 export default function Create() {
-  const { register, handleSubmit } = useForm();
+  const schema = yup.object({
+  name: yup.string().required("Name is required").min(3,"Name must be at least 3 characters"),
+  email: yup.string().email("Email is invalid").required("Email is required"),
+  age: yup.number().required("Age is required"),
+  image: yup.mixed().required("Image is required"),
+});
+
+  const { register, handleSubmit,formState:{errors} } = useForm(
+    {
+      resolver: yupResolver(schema),
+    }
+  );
   const queryClient = useQueryClient();
 
+
 const AddUser = async (data) => {
+  
   try {
     const formData = new FormData();
     formData.append("name", data.name);
@@ -15,12 +30,13 @@ const AddUser = async (data) => {
     formData.append("age", data.age);
     formData.append("image", data.image[0]);
 
-    await axios.post("https://ums12.runasp.net/api/users", formData);
-    queryClient.invalidateQueries({ queryKey: ["users"] });
+    const response = await axios.post("https://ums12.runasp.net/api/users", formData);
+    await queryClient.invalidateQueries({ queryKey: ["users"] });
+
 
 
   } catch (error) {
-    alert("Error");
+    alert(JSON.stringify(error.response.data.errors));
   }
 };
 
@@ -39,6 +55,7 @@ const AddUser = async (data) => {
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-medium text-gray-500">Email</label>
               <input type="email" {...register("email")} placeholder="alaa@example.com" className="px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition" />
+            
             </div>
 
             <div className="flex flex-col gap-1.5">
